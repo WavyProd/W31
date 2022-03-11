@@ -5,7 +5,7 @@ def parser(expr):
     length = len(expr)
     elements = expr.split()
     if length < 3:
-        print("Error: cannot parser the statement")
+        print("Error with parsing the statement")
     else:
         return statement_parser(elements)
 
@@ -20,18 +20,14 @@ def statement_parser(elements):
         elif elements[1] in operator:
             if len(elements) < 3:
                 raise SyntaxError(f"Missing values for {elements[1]}")
-            # check if the preceding or succeeding element are valid numbers
             if invalid_number(elements[0]) or invalid_number(elements[2]):
                 raise SyntaxError(f"Invalid syntax: {elements[0]} {elements[1]} {elements[2]}")
-            if elements[1] in {'+', '-'}:  # [1, +, []]
+            if elements[1] in {'+', '-'}:
                 return [elements[0], elements[1], statement_parser(elements[2:])]
-            elif elements[1] in {'*', '/'}:  # [[1, *, 2], ...]
-                # check if a exp is followed
+            elif elements[1] in {'*', '/'}:
                 if 4 <= len(elements) and elements[3] == '**':
-                    # check if there are enough terms
                     if len(elements) < 5:
                         raise SyntaxError(f"Invalid syntax: missing values {elements[4]}")
-                    # check if the value followed is valid
                     if invalid_number(elements[4]):
                         raise SyntaxError(f"Invalid syntax: {' '.join(elements[2: 5])}")
                     exp = [elements[0], elements[1], elements[2:5]]
@@ -101,8 +97,6 @@ def calculate(num1, operator, num2):
 def main():
     for line in sys.stdin:
         print(eval(parser(line)))
-    # print(parser("2 * 2 ** 2"))
-
-
+    
 if __name__ == '__main__':
     main()
